@@ -1,0 +1,43 @@
+# ############################### Terminal Prompt ####################################### #
+
+# Output your active git branch.
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+# Output Git Email
+function display_git_email {
+  if [ -d .git ]; then
+    git config user.email
+  fi;  
+}
+
+# Build Prompt
+function prompt {
+
+  # Display Character
+  local        STAR="☆"
+
+  # Colors
+  local   RED="\[\e[0;31m\]"
+  local   BLUE="\[\e[0;34m\]"
+  local   GREEN="\[\e[0;32m\]"
+  local   GRAY_TEXT_BLUE_BACKGROUND="\[\e[37;44;1m\]"
+  local   LIGHT_BLUE="\[\e[38;5;74m\]"
+  local   PEACH="\[\e[38;5;131m\]"
+  local   GREY="\[\e[38;5;239m\]"
+  local   MINT="\[\e[38;5;193m\]"
+
+  # Reset Text Color
+  local   RESET="\[\e[0m\]"
+
+  # ♥ ☆ - Keeping some fun ASCII Characters for reference
+
+  # PS1 Variable Stores Text For The Prompt
+  export PS1="\[\e]2;\u@\h\a[$GREY\t$RESET]$PEACH\$(parse_git_branch) $LIGHT_BLUE\$(display_git_email) \[\e[1m\e[4m\e$GREY\W\[\e[0m\]\n$LIGHT_BLUE//$PEACH $STAR $RESET"
+    PS2='> '
+    PS4='+ '
+}
+
+# Call Prompt
+prompt
